@@ -30,3 +30,7 @@
 *.exe
 *.out
 *.app
+/.vs
+/x64
+/MReader/x64
+/MReader/imgui.ini

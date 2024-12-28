@@ -1,0 +1,3 @@
+[submodule "MReader/vendor/imgui"]
+	path = MReader/vendor/imgui
+	url = https://github.com/ocornut/imgui
