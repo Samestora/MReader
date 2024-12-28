@@ -34,3 +34,6 @@
 /x64
 /MReader/x64
 /MReader/imgui.ini
+/MReader/Release
+/MReader/vendor/libwebp-1.5.0
+/Release

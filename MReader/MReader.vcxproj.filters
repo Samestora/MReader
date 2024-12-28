@@ -81,4 +81,7 @@
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
+  <ItemGroup>
+    <Library Include="vendor\libwebp-x86\lib\libwebp.lib" />
+  </ItemGroup>
 </Project>
