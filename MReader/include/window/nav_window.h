@@ -9,4 +9,6 @@
 #include <vector>
 #include <string>
 
-void createNavWindow(ImVec2 navSize,ImVec2 navPos, int mangaTotal, std::vector<std::string> mangalistobj, int& selected);
+namespace MRWindow {
+	void createNavWindow(ImVec2 navSize, ImVec2 navPos, int mangaTotal, std::vector<std::string> mangalistobj, int& selected);
+}

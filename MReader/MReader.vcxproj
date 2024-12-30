@@ -100,14 +100,14 @@
       <PreprocessorDefinitions>WIN32;NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\\vendor\\libwebp\\include;%(AdditionalIncludeDirectories);</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\\vendor\\libwebp\\include;$(ProjectDir)\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
-      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp\\lib\;$(ProjectDir)\\vendor\\libwebp\\include\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp-x86\\lib\;$(ProjectDir)\\vendor\\libwebp\\include\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
       <AdditionalDependencies>libwebp.lib;d3d11.lib;%(AdditionalDependencies);$(CoreLibraryDependencies);%(AdditionalDependencies);</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
@@ -144,11 +144,18 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libwebp.lib;d3d11.lib;%(AdditionalDependencies);$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp-x86\\lib\;$(ProjectDir)\\vendor\\libwebp\\include\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp\\lib\\;$(ProjectDir)\\vendor\\libwebp\\include\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
+    <ClCompile Include="src\application\init.cpp" />
     <ClCompile Include="src\main.cpp" />
+    <ClCompile Include="src\settings\themes.cpp" />
+    <ClCompile Include="src\util\getbasepath.cpp" />
+    <ClCompile Include="src\util\imageformat.cpp" />
+    <ClCompile Include="src\util\mangaloader.cpp" />
+    <ClCompile Include="src\util\release.cpp" />
+    <ClCompile Include="src\util\textureloader.cpp" />
     <ClCompile Include="src\window\main_window.cpp" />
     <ClCompile Include="src\window\nav_window.cpp" />
     <ClCompile Include="vendor\imgui\backends\imgui_impl_dx11.cpp" />
@@ -160,10 +167,17 @@
     <ClCompile Include="vendor\imgui\imgui_widgets.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="src\window\main_window.h" />
-    <ClInclude Include="src\window\nav_window.h" />
-    <ClInclude Include="vendor\stb\stb_image.h" />
+    <ClInclude Include="include\application\init.h" />
+    <ClInclude Include="include\settings\themes.h" />
+    <ClInclude Include="include\util\getbasepath.h" />
+    <ClInclude Include="include\util\imageformat.h" />
+    <ClInclude Include="include\util\mangaloader.h" />
+    <ClInclude Include="include\util\release.h" />
+    <ClInclude Include="include\util\textureloader.h" />
+    <ClInclude Include="include\window\main_window.h" />
+    <ClInclude Include="include\window\nav_window.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_dx11.h" />
+    <ClInclude Include="vendor\stb\stb_image.h" />
     <ClInclude Include="vendor\imgui\backends\imgui_impl_win32.h" />
     <ClInclude Include="vendor\imgui\imconfig.h" />
     <ClInclude Include="vendor\imgui\imgui.h" />
@@ -171,6 +185,9 @@
     <ClInclude Include="vendor\imgui\imstb_rectpack.h" />
     <ClInclude Include="vendor\imgui\imstb_textedit.h" />
     <ClInclude Include="vendor\imgui\imstb_truetype.h" />
+  </ItemGroup>
+  <ItemGroup>
+    <Library Include="vendor\libwebp-x86\lib\libwebp.lib" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">
