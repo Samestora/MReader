@@ -48,22 +48,28 @@
     <ClCompile Include="src\main.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\release.cpp">
+    <ClCompile Include="src\graphics\release.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\application\init.cpp">
+    <ClCompile Include="src\application\render.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\getbasepath.cpp">
+    <ClCompile Include="src\settings\path.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\imageformat.cpp">
+    <ClCompile Include="src\images\imageformat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\textureloader.cpp">
+    <ClCompile Include="src\graphics\textureloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\util\mangaloader.cpp">
+    <ClCompile Include="src\images\mangaloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="include\settings\fonts.h">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\settings\fonts.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -89,9 +95,6 @@
     <ClInclude Include="vendor\imgui\backends\imgui_impl_win32.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="vendor\stb\stb_image.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
     <ClInclude Include="include\window\nav_window.h">
       <Filter>Header Files</Filter>
     </ClInclude>
@@ -104,26 +107,40 @@
     <ClInclude Include="vendor\imgui\backends\imgui_impl_dx11.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\util\release.h">
+    <ClInclude Include="include\graphics\release.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\application\init.h">
+    <ClInclude Include="include\application\render.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\util\getbasepath.h">
+    <ClInclude Include="include\settings\path.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\util\imageformat.h">
+    <ClInclude Include="include\images\imageformat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\util\textureloader.h">
+    <ClInclude Include="include\graphics\textureloader.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="include\util\mangaloader.h">
+    <ClInclude Include="include\images\mangaloader.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="resource.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="vendor\stb\stb_image_resize.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\window\main_window_state.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
   <ItemGroup>
-    <Library Include="vendor\libwebp-x86\lib\libwebp.lib" />
+    <ResourceCompile Include="MReader.rc">
+      <Filter>Resource Files</Filter>
+    </ResourceCompile>
   </ItemGroup>
 </Project>

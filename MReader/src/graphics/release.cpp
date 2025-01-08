@@ -1,6 +1,6 @@
-#include "util/release.h"
+#include "graphics/release.h"
 
-namespace MRUtil {
+namespace MRGraphics {
     void ReleaseTextures(std::vector<ID3D11ShaderResourceView*>& textures) {
         for (auto& texture : textures)
         {

@@ -7,6 +7,6 @@
 #include <vector>
 #include <string>
 
-namespace MRUtil {
+namespace MRGraphics {
 	void ReleaseTextures(std::vector<ID3D11ShaderResourceView*>& textures);
 }

@@ -4,6 +4,8 @@
 // Get libwebp v1.50-windows-x64 here : https://developers.google.com/speed/webp/download
 //                          -x86 you have to compile it first to x86 using nmake
 // The D3D11.lib should be built-in when using Visual Studio 2022 for the package
+// Nlohmann's JSON
+// OpenDyslexic Font
 
 #define APP_WIDTH 1280
 #define APP_HEIGHT 800
@@ -13,22 +15,14 @@
 #pragma warning (disable: 4127)     // condition expression is constant
 #pragma warning (disable: 4996)     // 'This function or variable may be unsafe': strcpy, strdup, sprintf, vsnprintf, sscanf, fopen
 #pragma warning (disable: 26451)    // [Static Analyzer] Arithmetic overflow : Using operator 'xxx' on a 4 byte value and then casting the result to an 8 byte value. Cast the value to the wider type before calling operator 'xxx' to avoid overflow(io.2).
+#pragma warning (disable: 6387)     // 'pBackBuffer' could be '0':  this does not adhere to the specification for the function 'ID3D11Device::CreateRenderTargetView'. See line 0 for an earlier location where this can occur
 #endif
 
-// ImGui headers
-#include <d3d11.h>
-#include <imgui/imgui.h>
-#include <imgui_impl_win32.h>
-#include <imgui_impl_dx11.h>
-
-// Internal/Externals headers
-#include <vector>
-
 // MReader defined headers
+#include "settings/path.h"
+#include "settings/fonts.h"
 #include "settings/themes.h"
-#include "util/mangaloader.h"
-#include "util/getbasepath.h"
-#include "application/init.h"
+#include "application/render.h"
 
 // Data
 static ID3D11Device*            g_pd3dDevice            = nullptr;
@@ -39,13 +33,15 @@ static bool                     g_SwapChainOccluded     = false;
 static UINT                     g_ResizeWidth = 0, g_ResizeHeight = 0;
 
 // MReader related data
-int image_x, image_y;
-int selected = -1, lastSelected = -1;
-bool done = false, newlyRead = false, favorite = false;
-ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
+bool done = false;
+MRImage::Image image;
+MRWindow::MainWindowState state;
+std::string fontBasePath;
 std::string mangaBasePath;
 std::vector<std::string> manga_list;
+std::vector<std::string> font_list;
 std::vector<ID3D11ShaderResourceView*> textures;
+ImVec4 clear_color = ImVec4(0.45f, 0.55f, 0.60f, 1.00f);
 
 // Forward declarations of helper functions
 bool CreateDeviceD3D(HWND hWnd);
@@ -57,21 +53,21 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 int main(int, char**) {
     // Create application window
     //ImGui_ImplWin32_EnableDpiAwareness();
-    WNDCLASSEXW wc = { sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"ImGui Example", nullptr };
+    WNDCLASSEXW wc = {
+        sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"MReader", nullptr
+    };
     ::RegisterClassExW(&wc);
-    
+
     // 320 x 160 was substracted from 1920-1280 and 1080-800
+    // Probably needs to make it universal by get the current system's resolution...
     HWND hwnd = ::CreateWindowW(wc.lpszClassName, L"MReader", WS_OVERLAPPEDWINDOW, 320, 160, APP_WIDTH, APP_HEIGHT, nullptr, nullptr, wc.hInstance, nullptr);
 
-    // Initialize Direct3D
     if (!CreateDeviceD3D(hwnd))
     {
         CleanupDeviceD3D();
         ::UnregisterClassW(wc.lpszClassName, wc.hInstance);
         return 1;
     }
-
-    // Show the window
     ::ShowWindow(hwnd, SW_SHOWDEFAULT);
     ::UpdateWindow(hwnd);
 
@@ -82,33 +78,33 @@ int main(int, char**) {
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
 
-    // Setup Dear ImGui style
-    MRTheme::setDarkThemeColors();
+    
 
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(hwnd);
     ImGui_ImplDX11_Init(g_pd3dDevice, g_pd3dDeviceContext);
 
-    // Load Fonts
-    // - If no fonts are loaded, dear imgui will use the default font. You can also load multiple fonts and use ImGui::PushFont()/PopFont() to select them.
-    // - AddFontFromFileTTF() will return the ImFont* so you can store it if you need to select the font among multiple.
-    // - If the file cannot be loaded, the function will return a nullptr. Please handle those errors in your application (e.g. use an assertion, or display an error and quit).
-    // - The fonts will be rasterized at a given size (w/ oversampling) and stored into a texture when calling ImFontAtlas::Build()/GetTexDataAsXXXX(), which ImGui_ImplXXXX_NewFrame below will call.
-    // - Use '#define IMGUI_ENABLE_FREETYPE' in your imconfig file to use Freetype for higher quality font rendering.
-    // - Read 'docs/FONTS.md' for more instructions and details.
-    // - Remember that in C/C++ if you want to include a backslash \ in a string literal you need to write a double backslash \\ !
-    //io.Fonts->AddFontDefault();
-    //io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\segoeui.ttf", 18.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/DroidSans.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Roboto-Medium.ttf", 16.0f);
-    //io.Fonts->AddFontFromFileTTF("../../misc/fonts/Cousine-Regular.ttf", 15.0f);
-    //ImFont* font = io.Fonts->AddFontFromFileTTF("c:\\Windows\\Fonts\\ArialUni.ttf", 18.0f, nullptr, io.Fonts->GetGlyphRangesJapanese());
-    //IM_ASSERT(font != nullptr);
-
-    mangaBasePath = MRUtil::getBasePath();
+    // Init data
+    state = {
+        false, 
+        false, 
+        0,
+        -1,
+        -1, 
+        false, 
+        false, 
+        false
+    };
+    mangaBasePath = MRPath::getMangaPath();
+    fontBasePath = MRPath::getFontPath();
 
     // Read all from the existing directory
-    manga_list = GetMangaList(mangaBasePath);
+    manga_list = LoadMangaList(mangaBasePath);
+    font_list = MRTheme::getFontList(fontBasePath);
+
+    // Setup style
+    MRTheme::setDarkThemeColors();
+    // MRTheme::setFontbyFilepath(font_list[3], 20.0, io);
     
     // Main rendering done here
     while (!done)
@@ -143,7 +139,7 @@ int main(int, char**) {
             CreateRenderTarget();
         }
 
-        MRApplication::Init(mangaBasePath, manga_list, selected, lastSelected, image_x, image_y, newlyRead, favorite, textures, clear_color, g_pd3dDeviceContext, g_pSwapChain, g_SwapChainOccluded, g_mainRenderTargetView, g_pd3dDevice);
+        MRApplication::Render(mangaBasePath, manga_list, image, state, textures, clear_color, g_pd3dDeviceContext, g_pSwapChain, g_SwapChainOccluded, g_mainRenderTargetView, g_pd3dDevice);
     }
 
     // Cleanup

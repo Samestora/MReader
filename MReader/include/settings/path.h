@@ -11,6 +11,7 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
-namespace MRUtil {
-    std::string getBasePath();
+namespace MRPath {
+    std::string getMangaPath();
+    std::string getFontPath();
 }

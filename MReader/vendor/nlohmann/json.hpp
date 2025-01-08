@@ -14,6 +14,7 @@
  * removed, but marked deprecated. See "Generate documentation" section in  *
  * file docs/README.md.                                                     *
 \****************************************************************************/
+#pragma warning (disable: 26819)    // Unannotated fallthrough between switch labels (es.78). (JSON.hpp)
 
 #ifndef INCLUDE_NLOHMANN_JSON_HPP_
 #define INCLUDE_NLOHMANN_JSON_HPP_
