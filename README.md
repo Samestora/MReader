@@ -53,8 +53,8 @@ Portable (no installation needed) with low memory footprint all in DirectX11
 ```
 ## 🧪 Development
 
-[!IMPORTANT]  
-It's still under pre release, so expect bugs.
+> [!IMPORTANT]  
+> It's still under pre release, so expect bugs.
 
 > **Note** <br>
 > Make sure that **DXSDK_DIR** is declared in your environment variables.
