@@ -20,7 +20,7 @@
 
 // MReader defined headers
 #include "settings/path.h"
-#include "settings/fonts.h"
+#include "fonts/fontloader.h"
 #include "settings/themes.h"
 #include "application/render.h"
 
@@ -100,11 +100,11 @@ int main(int, char**) {
 
     // Read all from the existing directory
     manga_list = LoadMangaList(mangaBasePath);
-    font_list = MRTheme::getFontList(fontBasePath);
+    font_list = MRFont::getFontList(fontBasePath);
 
     // Setup style
     MRTheme::setDarkThemeColors();
-    // MRTheme::setFontbyFilepath(font_list[3], 20.0, io);
+    //MRFont::setFontbyFilepath(font_list[3], 20.0, io);
     
     // Main rendering done here
     while (!done)

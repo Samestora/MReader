@@ -1,9 +1,3 @@
-//#define IMAGE_WIDTH 514
-//#define IMAGE_HEIGHT 714
-//
- #define IMAGE_WIDTH 700
- #define IMAGE_HEIGHT 980
-
 #include "application/render.h"
 
 namespace MRApplication {
@@ -19,7 +13,6 @@ namespace MRApplication {
         ImVec2 mainSize = ImVec2(viewport->Size.x / 3 * 2, viewport->Size.y);
 
         // Create navigation window
-
         if (state.reading == false) {
             MRWindow::createNavWindow(navSize, ImVec2(0, 0), manga_list.size(), manga_list, state.selected);
         }
@@ -40,33 +33,37 @@ namespace MRApplication {
             state.reading = false;
             state.current_page = 0;
         }
-        else if (state.selected == state.last_selected && state.selected >= 0){
-            if ((state.reading == true && state.isLoaded == false) || state.next_page == true || state.previous_page == true) {
+        // if selected
+        else if (state.selected == state.last_selected && state.selected >= 0) {
+            // Start reading
+            if (state.reading && !state.isLoaded) {
                 MRGraphics::ReleaseTextures(textures);
-                // Set path
                 std::string selectedMangaPath = mangaBasePath + manga_list[state.selected];
                 LoadNormal(selectedMangaPath, &state, textures, &image.width, &image.height, g_pd3dDevice);
                 state.isLoaded = true;
             }
-            if (state.reading == false && state.isLoaded == true) {
+            // Stop reading
+            else if (!state.reading && state.isLoaded) {
                 MRGraphics::ReleaseTextures(textures);
                 std::string selectedMangaPath = mangaBasePath + manga_list[state.selected];
-
-                // Load the first manga cover for the new selection
                 LoadFirstMangaCover(selectedMangaPath, textures, &image.width, &image.height, g_pd3dDevice);
                 state.isLoaded = false;
             }
+            // Changing
+            else if (state.next_page || state.previous_page) {
+                MRGraphics::ReleaseTextures(textures);
+                std::string selectedMangaPath = mangaBasePath + manga_list[state.selected];
+                LoadNormal(selectedMangaPath, &state, textures, &image.width, &image.height, g_pd3dDevice);
+                state.isLoaded = true;
+            }
         }
-
-        // Set image dimensions for rendering
-        image.width = IMAGE_WIDTH;
-        image.height = IMAGE_HEIGHT;
 
         // Create main window
-        // Full screen if in reading mode
-        if (state.reading == false) {
+        // Not yet reading browse with the nav_window
+        if (!state.reading) {
             MRWindow::createMainWindow(mainSize, ImVec2(navSize.x, 0), manga_list, textures, image.width, image.height, &state);
         }
+        // Full screen view
         else {
             MRWindow::createMainWindow(viewport->Size, viewport->Pos, manga_list, textures, image.width, image.height, &state);
         }

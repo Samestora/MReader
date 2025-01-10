@@ -50,7 +50,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>Unicode</CharacterSet>
+    <CharacterSet>MultiByte</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -137,7 +137,7 @@
       <PreprocessorDefinitions>NDEBUG;_CONSOLE;%(PreprocessorDefinitions)</PreprocessorDefinitions>
       <ConformanceMode>true</ConformanceMode>
       <LanguageStandard>stdcpp20</LanguageStandard>
-      <AdditionalIncludeDirectories>$(ProjectDir)\\vendor\\libwebp\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
+      <AdditionalIncludeDirectories>$(ProjectDir)\\vendor\\libwebp\\include;$(ProjectDir)\\include;%(AdditionalIncludeDirectories)</AdditionalIncludeDirectories>
     </ClCompile>
     <Link>
       <SubSystem>Console</SubSystem>
@@ -145,14 +145,16 @@
       <OptimizeReferences>true</OptimizeReferences>
       <GenerateDebugInformation>true</GenerateDebugInformation>
       <AdditionalDependencies>libwebp.lib;d3d11.lib;%(AdditionalDependencies);$(CoreLibraryDependencies);%(AdditionalDependencies)</AdditionalDependencies>
-      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp\\lib\\;$(ProjectDir)\\vendor\\libwebp\\include\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalLibraryDirectories>$(ProjectDir)\\vendor\\libwebp\\lib\\;%(AdditionalLibraryDirectories)</AdditionalLibraryDirectories>
+      <AdditionalOptions>/NODEFAULTLIB:LIBCMT %(AdditionalOptions)</AdditionalOptions>
     </Link>
   </ItemDefinitionGroup>
   <ItemGroup>
-    <ClCompile Include="include\settings\fonts.h" />
+    <ClCompile Include="include\fonts\fontloader.h" />
     <ClCompile Include="src\application\render.cpp" />
+    <ClCompile Include="src\fonts\fontformat.cpp" />
     <ClCompile Include="src\main.cpp" />
-    <ClCompile Include="src\settings\fonts.cpp" />
+    <ClCompile Include="src\fonts\fontloader.cpp" />
     <ClCompile Include="src\settings\themes.cpp" />
     <ClCompile Include="src\settings\path.cpp" />
     <ClCompile Include="src\images\imageformat.cpp" />
@@ -171,6 +173,7 @@
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="include\application\render.h" />
+    <ClInclude Include="include\fonts\fontformat.h" />
     <ClInclude Include="include\settings\themes.h" />
     <ClInclude Include="include\settings\path.h" />
     <ClInclude Include="include\images\imageformat.h" />

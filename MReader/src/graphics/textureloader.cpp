@@ -2,6 +2,10 @@
 #define STB_IMAGE_RESIZE_IMPLEMENTATION
 #define _CRT_SECURE_NO_WARNINGS
 
+// Target dimensions for downscaling
+#define TARGET_IMAGE_WIDTH 700
+#define TARGET_IMAGE_HEIGHT 980
+
 #include "graphics/textureloader.h"
 #include <stb/stb_image_resize.h>
 #include <stb/stb_image.h>
@@ -41,15 +45,40 @@ namespace MRGraphics {
 
         if (!image_data) return false;
 
+        // Ease GPU and RAM Usage
+        if (image_width > TARGET_IMAGE_WIDTH || image_height > TARGET_IMAGE_HEIGHT) {
+            unsigned char* resized_image = new unsigned char[TARGET_IMAGE_WIDTH * TARGET_IMAGE_HEIGHT * 4]; // RGBA
+            bool resized = stbir_resize_uint8(image_data, image_width, image_height, 0, resized_image, TARGET_IMAGE_WIDTH, TARGET_IMAGE_HEIGHT, 0, 4);
+
+            // Free original image data and update pointers if resized successfully
+            if (resized) {
+                if (format == MRImage::ImageFormat::FORMAT_WEBP) {
+                    WebPFree(image_data);
+                }
+                else {
+                    stbi_image_free(image_data);
+                }
+
+                image_data = resized_image;
+                image_width = TARGET_IMAGE_WIDTH;
+                image_height = TARGET_IMAGE_HEIGHT;
+            }
+            else {
+                delete[] resized_image; // Cleanup on failure
+            }
+        }
+
         D3D11_TEXTURE2D_DESC desc = {};
+        ZeroMemory(&desc, sizeof(desc));
         desc.Width = image_width;
         desc.Height = image_height;
         desc.MipLevels = 1;
-        desc.ArraySize = 1;
+        desc.ArraySize = 1; 
         desc.Format = DXGI_FORMAT_R8G8B8A8_UNORM;
         desc.SampleDesc.Count = 1;
         desc.Usage = D3D11_USAGE_DEFAULT;
         desc.BindFlags = D3D11_BIND_SHADER_RESOURCE;
+        desc.CPUAccessFlags = 0;
 
         ID3D11Texture2D* texture = nullptr;
         D3D11_SUBRESOURCE_DATA subResource = { image_data, static_cast<UINT>(desc.Width * 4), 0 };
@@ -66,10 +95,11 @@ namespace MRGraphics {
         }
 
         D3D11_SHADER_RESOURCE_VIEW_DESC srvDesc = {};
+        ZeroMemory(&srvDesc, sizeof(srvDesc));
         srvDesc.Format = desc.Format;
         srvDesc.ViewDimension = D3D11_SRV_DIMENSION_TEXTURE2D;
         srvDesc.Texture2D.MostDetailedMip = 0;
-        srvDesc.Texture2D.MipLevels = 1;
+        srvDesc.Texture2D.MipLevels = desc.MipLevels;
 
         hr = g_pd3dDevice->CreateShaderResourceView(texture, &srvDesc, out_srv);
         texture->Release();

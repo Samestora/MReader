@@ -65,7 +65,7 @@ void LoadNormal(const std::string& directory, MRWindow::MainWindowState* state ,
             if (std::regex_search(file_name, match, number_pattern)) {
                 int num = std::stoi(match.str(1));
                 files.emplace_back(num, entry.path().string());
-			}
+            }
         }
 
         std::sort(files.begin(), files.end(), [](const auto& a, const auto& b) { return a.first < b.first; });
@@ -79,11 +79,11 @@ void LoadNormal(const std::string& directory, MRWindow::MainWindowState* state ,
                 if (MRGraphics::LoadTextureFromFile(file_path.c_str(), &texture_srv, out_width, out_height, g_pd3dDevice))
                     out_srvs.push_back(texture_srv);
             }
-            
+
             state->current_page += 2;
         }
         // back
-        else if (state->previous_page == true && state -> current_page > 2) {
+        else if (state->previous_page == true && state->current_page > 2) {
             state->current_page -= 2;
             for (unsigned int i = state->current_page - 2; i < state->current_page; ++i) {
                 const auto& [num, file_path] = files[i];
@@ -93,7 +93,7 @@ void LoadNormal(const std::string& directory, MRWindow::MainWindowState* state ,
             }
         }
         // Init
-        else if (state -> previous_page == false && state -> next_page == false) {
+        else if (state->previous_page == false && state->next_page == false) {
             for (unsigned int i = state->current_page; i < state->current_page + 2 && i < files.size(); ++i) {
                 const auto& [num, file_path] = files[i];
                 ID3D11ShaderResourceView* texture_srv = nullptr;

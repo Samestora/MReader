@@ -45,9 +45,6 @@
     <ClCompile Include="vendor\imgui\backends\imgui_impl_dx11.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\main.cpp">
-      <Filter>Source Files</Filter>
-    </ClCompile>
     <ClCompile Include="src\graphics\release.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
@@ -66,10 +63,16 @@
     <ClCompile Include="src\images\mangaloader.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="include\settings\fonts.h">
+    <ClCompile Include="include\fonts\fontloader.h">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="src\settings\fonts.cpp">
+    <ClCompile Include="src\fonts\fontloader.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\main.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="src\fonts\fontformat.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
@@ -135,6 +138,9 @@
       <Filter>Header Files</Filter>
     </ClInclude>
     <ClInclude Include="include\window\main_window_state.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
+    <ClInclude Include="include\fonts\fontformat.h">
       <Filter>Header Files</Filter>
     </ClInclude>
   </ItemGroup>
