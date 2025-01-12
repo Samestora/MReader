@@ -2,6 +2,7 @@
 
 #include <cstddef>
 #include <cstring>
+#include <vector>
 
 namespace MRFont {
     enum FontFormat {
@@ -10,8 +11,9 @@ namespace MRFont {
         FORMAT_TTF        
     };
 
-    struct Font {
-        float size;
+    struct FontList {
+        int amount;
+        std::vector<char> list; // Use vector for dynamic string buffer management
     };
 
     FontFormat DetectFontFormat(const void* data, size_t data_size);

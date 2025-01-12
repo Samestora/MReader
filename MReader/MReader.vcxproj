@@ -50,7 +50,7 @@
     <UseDebugLibraries>false</UseDebugLibraries>
     <PlatformToolset>v143</PlatformToolset>
     <WholeProgramOptimization>true</WholeProgramOptimization>
-    <CharacterSet>MultiByte</CharacterSet>
+    <CharacterSet>Unicode</CharacterSet>
   </PropertyGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.props" />
   <ImportGroup Label="ExtensionSettings">
@@ -153,8 +153,8 @@
     <ClCompile Include="include\fonts\fontloader.h" />
     <ClCompile Include="src\application\render.cpp" />
     <ClCompile Include="src\fonts\fontformat.cpp" />
-    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\fonts\fontloader.cpp" />
+    <ClCompile Include="src\main.cpp" />
     <ClCompile Include="src\settings\themes.cpp" />
     <ClCompile Include="src\settings\path.cpp" />
     <ClCompile Include="src\images\imageformat.cpp" />

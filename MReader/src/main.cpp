@@ -52,10 +52,15 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam);
 
 int main(int, char**) {
     // Create application window
-    //ImGui_ImplWin32_EnableDpiAwareness();
+    
+    ImGui_ImplWin32_EnableDpiAwareness();
+
     WNDCLASSEXW wc = {
         sizeof(wc), CS_CLASSDC, WndProc, 0L, 0L, GetModuleHandle(nullptr), nullptr, nullptr, nullptr, nullptr, L"MReader", nullptr
     };
+     
+    wc.hbrBackground = CreateSolidBrush(RGB(26, 27, 28));
+
     ::RegisterClassExW(&wc);
 
     // 320 x 160 was substracted from 1920-1280 and 1080-800
@@ -77,8 +82,6 @@ int main(int, char**) {
     ImGuiIO& io = ImGui::GetIO(); (void)io;
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableKeyboard;     // Enable Keyboard Controls
     io.ConfigFlags |= ImGuiConfigFlags_NavEnableGamepad;      // Enable Gamepad Controls
-
-    
 
     // Setup Platform/Renderer backends
     ImGui_ImplWin32_Init(hwnd);
@@ -103,9 +106,16 @@ int main(int, char**) {
     font_list = MRFont::getFontList(fontBasePath);
 
     // Setup style
-    MRTheme::setDarkThemeColors();
-    //MRFont::setFontbyFilepath(font_list[3], 20.0, io);
-    
+    // Theme on start
+    MRTheme::setFluentUITheme();
+    MRTheme::globalStyle();
+
+    // Font on start
+    MRFont::setDefaultFont();
+    for (auto& font : font_list) {
+        MRFont::setFontbyFilepath(font, 13.0);
+    }
+
     // Main rendering done here
     while (!done)
     {
@@ -131,15 +141,35 @@ int main(int, char**) {
         g_SwapChainOccluded = false;
 
         // Handle window resize (we don't resize directly in the WM_SIZE handler)
-        if (g_ResizeWidth != 0 && g_ResizeHeight != 0)
-        {
+        if (g_ResizeWidth != 0 && g_ResizeHeight != 0) {
             CleanupRenderTarget();
             g_pSwapChain->ResizeBuffers(0, g_ResizeWidth, g_ResizeHeight, DXGI_FORMAT_UNKNOWN, 0);
             g_ResizeWidth = g_ResizeHeight = 0;
             CreateRenderTarget();
         }
 
+        // Start the Dear ImGui frame
+        ImGui_ImplDX11_NewFrame();
+        ImGui_ImplWin32_NewFrame();
+        ImGui::NewFrame();
+
         MRApplication::Render(mangaBasePath, manga_list, image, state, textures, clear_color, g_pd3dDeviceContext, g_pSwapChain, g_SwapChainOccluded, g_mainRenderTargetView, g_pd3dDevice);
+
+        // Rendering
+        ImGui::Render();
+        const float clear_color_with_alpha[4] = {
+            clear_color.x * clear_color.w,
+            clear_color.y * clear_color.w,
+            clear_color.z * clear_color.w,
+            clear_color.w
+        };
+        g_pd3dDeviceContext->OMSetRenderTargets(1, &g_mainRenderTargetView, nullptr);
+        g_pd3dDeviceContext->ClearRenderTargetView(g_mainRenderTargetView, clear_color_with_alpha);
+        ImGui_ImplDX11_RenderDrawData(ImGui::GetDrawData());
+
+        // Present the frame
+        HRESULT hr = g_pSwapChain->Present(1, 0); // Present with vsync
+        g_SwapChainOccluded = (hr == DXGI_STATUS_OCCLUDED);
     }
 
     // Cleanup
@@ -153,6 +183,7 @@ int main(int, char**) {
 
     return 0;
 }
+
 
 // Helper functions
 
@@ -223,8 +254,7 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
     if (ImGui_ImplWin32_WndProcHandler(hWnd, msg, wParam, lParam))
         return true;
 
-    switch (msg)
-    {
+    switch (msg) {
     case WM_SIZE:
         if (wParam == SIZE_MINIMIZED)
             return 0;
@@ -237,12 +267,6 @@ LRESULT WINAPI WndProc(HWND hWnd, UINT msg, WPARAM wParam, LPARAM lParam)
         break;
     case WM_DESTROY:
         ::PostQuitMessage(0);
-        return 0;
-    case WM_PAINT:
-        PAINTSTRUCT ps;
-        HDC hdc = BeginPaint(hWnd, &ps);
-        FillRect(hdc, &ps.rcPaint, (HBRUSH)(COLOR_WINDOW)+1);
-        EndPaint(hWnd, &ps);
         return 0;
     }
     return ::DefWindowProcW(hWnd, msg, wParam, lParam);

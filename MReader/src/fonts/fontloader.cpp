@@ -8,7 +8,8 @@ namespace MRFont {
     * set a specific font by it's path, font glyph range automatically set to japanese, no config
     * USE THIS ONLY FOR AN ARRAY THAT'S ALREADY RUN getFontList()!
 	*/
-	void setFontbyFilepath(std::string fontpath, float fontsize ,ImGuiIO& io) {
+	void setFontbyFilepath(std::string fontpath, float fontsize) {
+        ImGuiIO& io = ImGui::GetIO();
 		ImFont* font = io.Fonts->AddFontFromFileTTF(fontpath.c_str(), fontsize, nullptr, io.Fonts->GetGlyphRangesJapanese());
 		IM_ASSERT(font != nullptr);
 	}
@@ -16,11 +17,57 @@ namespace MRFont {
     /*
     * sanitize the input once more in case of being called out-of-the-box
     */
-    void setFontbyFilepathSafe(std::string fontpath, float fontsize, ImGuiIO& io) {
+    void setFontbyFilepathSafe(std::string fontpath, float fontsize) {
         if (LoadFontFromFile(fontpath.c_str())) {
+            ImGuiIO& io = ImGui::GetIO();
             ImFont* font = io.Fonts->AddFontFromFileTTF(fontpath.c_str(), fontsize, nullptr, io.Fonts->GetGlyphRangesJapanese());
             IM_ASSERT(font != nullptr);
         }
+    }
+
+    void setDefaultFont() {
+        ImGuiIO& io = ImGui::GetIO();
+        //ImFontConfig* config = {};
+        //config.
+        ImFont* font = io.Fonts->AddFontDefault();
+        IM_ASSERT(font != nullptr);
+    }
+
+    // Generate the font list for the selector
+    FontList getFontListForLabel() {
+        ImGuiIO& io = ImGui::GetIO();
+        FontList complete_pool;
+
+        for (ImFont* font : io.Fonts->Fonts) {
+            const char* debug_name = font->GetDebugName();
+            complete_pool.list.insert(complete_pool.list.end(), debug_name, debug_name + strlen(debug_name));
+            complete_pool.list.push_back('\0'); // Null-terminate each entry
+        }
+        complete_pool.list.push_back('\0'); // Double null-termination for ImGui::Combo
+        complete_pool.amount = io.Fonts->Fonts.size();
+
+        return complete_pool;
+    }
+
+    // Change the default font
+    void selectFont(int index) {
+        ImGuiIO& io = ImGui::GetIO();
+
+        if (index >= 0 && index < io.Fonts->Fonts.size()) {
+            io.FontDefault = io.Fonts->Fonts[index];
+        }
+    }
+
+    // Show the font selector combo box
+    bool showFontSelector(const char* label) {
+        static int font_idx = 0; // Persistent selected font index
+        FontList labelList = getFontListForLabel();
+
+        if (ImGui::Combo(label, &font_idx, labelList.list.data())) {
+            selectFont(font_idx);
+            return true; // Font changed
+        }
+        return false; // No change
     }
 
 	/*

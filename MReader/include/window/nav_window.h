@@ -8,7 +8,11 @@
 #include <tchar.h>
 #include <vector>
 #include <string>
+#include <cstdlib>
+
+#include "fonts/fontloader.h"
+#include "settings/themes.h"
 
 namespace MRWindow {
-	void createNavWindow(ImVec2 navSize, ImVec2 navPos, int mangaTotal, std::vector<std::string> mangalistobj, int& selected);
+	void createNavWindow(ImVec2 navSize, ImVec2 navPos, int mangaTotal, std::vector<std::wstring> mangalistobj, int& selected);
 }

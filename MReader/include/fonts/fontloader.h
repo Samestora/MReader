@@ -6,13 +6,21 @@
 #include <filesystem>
 #include <iostream>
 
+#include "fonts/fontformat.h"
+
 namespace fs = std::filesystem;
 
 namespace MRFont {
 	std::vector<std::string> getFontList(std::string fontdirpath); // Return absolute path of those fonts
 	
-	void setFontbyFilepath(std::string fontpath, float fontsize, ImGuiIO& io);
-	void setFontbyFilepathSafe(std::string fontpath, float fontsize, ImGuiIO& io);
+	void setFontbyFilepath(std::string fontpath, float fontsize);
+	void setFontbyFilepathSafe(std::string fontpath, float fontsize);
+	
+	void setDefaultFont();
+	FontList getFontListForLabel();
+
+	void selectFont(int index);
+	bool showFontSelector(const char* label);
 
 	bool CheckFontFromMemory(const void* file_data, size_t file_size);
 	bool LoadFontFromFile(const char* file_name);
