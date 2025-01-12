@@ -14,5 +14,5 @@
 #include "settings/themes.h"
 
 namespace MRWindow {
-	void createNavWindow(ImVec2 navSize, ImVec2 navPos, int mangaTotal, std::vector<std::wstring> mangalistobj, int& selected);
+	void createNavWindow(ImVec2 navSize, ImVec2 navPos, int mangaTotal, std::vector<std::string> mangalistobj, int& selected);
 }
