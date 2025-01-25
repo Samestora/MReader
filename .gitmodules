@@ -1,6 +1,6 @@
-[submodule "MReader/vendor/imgui"]
-	path = MReader/vendor/imgui
-	url = https://github.com/ocornut/imgui
 [submodule "MReader/vendor/RapidFuzz"]
 	path = MReader/vendor/RapidFuzz
 	url = https://github.com/rapidfuzz/rapidfuzz-cpp.git
+[submodule "MReader/vendor/imgui"]
+	path = MReader/vendor/imgui
+	url = https://github.com/ocornut/imgui
