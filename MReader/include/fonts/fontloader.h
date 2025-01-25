@@ -8,6 +8,9 @@
 
 #include "fonts/fontformat.h"
 
+#ifndef MREADER_MREADER_INCLUDE_FONTS_FONTLOADER_H_
+#define MREADER_MREADER_INCLUDE_FONTS_FONTLOADER_H_
+
 namespace fs = std::filesystem;
 
 namespace MRFont {
@@ -25,3 +28,5 @@ namespace MRFont {
 	bool CheckFontFromMemory(const void* file_data, size_t file_size);
 	bool LoadFontFromFile(const char* file_name);
 }
+
+#endif // MREADER_MREADER_INCLUDE_FONTS_FONTLOADER_H_

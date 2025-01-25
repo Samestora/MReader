@@ -7,6 +7,11 @@
 #include <vector>
 #include <string>
 
+#ifndef MREADER_MREADER_INCLUDE_GRAPHICS_RELEASE_H_
+#define MREADER_MREADER_INCLUDE_GRAPHICS_RELEASE_H_
+
 namespace MRGraphics {
 	void ReleaseTextures(std::vector<ID3D11ShaderResourceView*>& textures);
 }
+
+#endif // MREADER_MREADER_INCLUDE_GRAPHICS_RELEASE_H_

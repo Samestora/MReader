@@ -1,0 +1,13 @@
+#pragma once
+
+#ifndef MREADER_MREADER_INCLUDE_SETTINGS_PREFERENCES_H_
+#define MREADER_MREADER_INCLUDE_SETTINGS_PREFERENCES_H_
+
+namespace MRPref {
+	enum ReadMode {
+		DEFAULT,
+		FULLSCREEN
+	};
+}
+
+#endif

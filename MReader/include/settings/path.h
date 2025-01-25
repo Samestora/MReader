@@ -11,7 +11,12 @@
 #include <string>
 #include <nlohmann/json.hpp>
 
+#ifndef MREADER_MREADER_INCLUDE_SETTINGS_PATH_H_
+#define MREADER_MREADER_INCLUDE_SETTINGS_PATH_H_
+
 namespace MRPath {
     std::string getMangaPath();
     std::string getFontPath();
 }
+
+#endif // MREADER_MREADER_INCLUDE_SETTINGS_PATH_H_

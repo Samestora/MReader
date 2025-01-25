@@ -16,17 +16,26 @@ namespace MRImage {
             return MRImage::ImageFormat::FORMAT_JPEG;
 
         // Check if the file is a PNG
-        if (bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47 && bytes[4] == 0x0D && bytes[5] == 0x0A && bytes[6] == 0x1A && bytes[7] == 0x0A)
+        else if (bytes[0] == 0x89 && bytes[1] == 0x50 && bytes[2] == 0x4E && bytes[3] == 0x47 && bytes[4] == 0x0D && bytes[5] == 0x0A && bytes[6] == 0x1A && bytes[7] == 0x0A)
             return MRImage::ImageFormat::FORMAT_PNG;
 
         // Check if the file is a HDR
-        if (std::memcmp(data, "#?RADIANCE", 10) == 0)
+        else if (std::memcmp(data, "#?RADIANCE", 10) == 0)
             return MRImage::ImageFormat::FORMAT_HDR;
 
         // Check if the file is a WebP (RIFF + WEBP)
-        if (bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
+        else if (bytes[0] == 'R' && bytes[1] == 'I' && bytes[2] == 'F' && bytes[3] == 'F' &&
             bytes[8] == 'W' && bytes[9] == 'E' && bytes[10] == 'B' && bytes[11] == 'P')
             return MRImage::ImageFormat::FORMAT_WEBP;
+
+        // GIF Format signature
+        else if (bytes[0] == 0x47 && bytes[1] == 0x49 && bytes[2] == 0x46 && bytes[3] == 0x38)
+            return MRImage::ImageFormat::FORMAT_GIF;
+        
+        // Zip file signature also works with CBZ
+        else if (bytes[0] == 0x4C && bytes[1] == 0x5A && bytes[2] == 0x49 && bytes[3] == 0x50) {
+            return MRImage::ImageFormat::FORMAT_ZIP;
+        }
 
         return MRImage::ImageFormat::FORMAT_UNKNOWN;
     }

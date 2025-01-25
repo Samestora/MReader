@@ -1,12 +1,15 @@
 #pragma once
 
-#include "window/main_window.h"
-#include "window/nav_window.h"
+#ifndef MREADER_MREADER_INCLUDE_APPLICATION_RENDER_H_
+#define MREADER_MREADER_INCLUDE_APPLICATION_RENDER_H_
+
+#include "window/window.h"
 #include "settings/themes.h"
 #include "images/mangaloader.h"
 #include "graphics/release.h"
-#include "window/main_window_state.h"
+#include "window/mainwindowstate.h"
 #include "images/imageformat.h"
+#include "graphics/gadgets.h"
 
 #include <algorithm>
 #include <fstream>
@@ -17,14 +20,11 @@ namespace MRApplication {
     void Render(
         const std::string& mangaBasePath,
         const std::vector<std::string>& manga_list,
-        MRImage::Image& image,
+        std::vector<MRImage::Image>& image,
         MRWindow::MainWindowState& state,
         std::vector<ID3D11ShaderResourceView*>& textures,
-        const ImVec4& clear_color,
-        ID3D11DeviceContext* g_pd3dDeviceContext,
-        IDXGISwapChain* g_pSwapChain,
-        bool& g_SwapChainOccluded,
-        ID3D11RenderTargetView* g_mainRenderTargetView,
-        ID3D11Device* g_pd3dDevice
+        const ImVec4& clear_color
     );
 }
+
+#endif // MREADER_MREADER_INCLUDE_APPLICATION_RENDER_H_

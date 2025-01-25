@@ -3,14 +3,13 @@
 namespace MRTheme {
     bool showStyleSelector(const char* label) {
         static int style_idx = 0;
-        if (ImGui::Combo(label, &style_idx, "FluentUI\0Glass\0Modern\0Material You\0Dark Theme\0FluentUI Light")) {
+        if (ImGui::Combo(label, &style_idx, "FluentUI\0Glass\0Modern\0Material You\0FluentUI Light")) {
             switch (style_idx) {
                 case 0: setFluentUITheme(); break;
                 case 1: setGlassTheme(); break;
                 case 2: setModernColors(); break;
                 case 3: setMaterialYouColors(); break;
-                case 4: setDarkThemeColors(); break;
-                case 5: setFluentUILightTheme(); break;
+                case 4: setFluentUILightTheme(); break;
             }
             globalStyle();
             return true;
@@ -86,38 +85,6 @@ namespace MRTheme {
         style.ItemSpacing = ImVec2(8.0f, 4.0f);
         style.IndentSpacing = 20.0f;
         style.ScrollbarSize = 16.0f;
-    }
-
-    void setDarkThemeColors() {
-        auto& colors = ImGui::GetStyle().Colors;
-        colors[ImGuiCol_WindowBg] = ImVec4{ 0.1f, 0.105f, 0.11f, 1.0f };
-
-        // Headers
-        colors[ImGuiCol_Header] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-        colors[ImGuiCol_HeaderHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-        colors[ImGuiCol_HeaderActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-
-        // Buttons
-        colors[ImGuiCol_Button] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-        colors[ImGuiCol_ButtonHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-        colors[ImGuiCol_ButtonActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-
-        // Frame BG
-        colors[ImGuiCol_FrameBg] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-        colors[ImGuiCol_FrameBgHovered] = ImVec4{ 0.3f, 0.305f, 0.31f, 1.0f };
-        colors[ImGuiCol_FrameBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-
-        // Tabs
-        colors[ImGuiCol_Tab] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-        colors[ImGuiCol_TabHovered] = ImVec4{ 0.38f, 0.3805f, 0.381f, 1.0f };
-        colors[ImGuiCol_TabActive] = ImVec4{ 0.28f, 0.2805f, 0.281f, 1.0f };
-        colors[ImGuiCol_TabUnfocused] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-        colors[ImGuiCol_TabUnfocusedActive] = ImVec4{ 0.2f, 0.205f, 0.21f, 1.0f };
-
-        // Title
-        colors[ImGuiCol_TitleBg] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-        colors[ImGuiCol_TitleBgActive] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
-        colors[ImGuiCol_TitleBgCollapsed] = ImVec4{ 0.15f, 0.1505f, 0.151f, 1.0f };
     }
 
     void setGlassTheme() {
